@@ -42,7 +42,37 @@ class AlgTemplate(TimeStamp):
 class Algorithm(TimeStamp):
 	template=models.CharField(AlgTemplate)
 
+class AlgImplementation(TimeStamp):
+	algorithm=models.ForeignKey(Algorithm)
+	author=models.CharField(max_length=200)
+	file=models.CharField(max_length=200)
+
 class ParamOfAlg(TimeStamp,Value):
 	algorithm=models.ForeignKey(Algorithm)
 	param=models.ForeignKey(algParam)
 
+class TaskParam(TimeStamp):
+	name=models.CharField(max_length=200)
+	desc=models.CharFiled(max_length=500)
+	type=models.PositiveSmallIntegerField()
+
+class TaskTemplate(TimeStamp):
+	name=models.CharField(max_length=200)
+	params=models.ManyToManyField(TaskParam)
+
+class Task(TimeStamp):
+	template=models.CharField(TaskTemplate)
+
+class ParamOfTask(TimeStamp,Value):
+	task=models.ForeignKey(Task)
+	param=models.ForeignKey(TaskParam)
+
+class Computer(TimeStamp):
+	name=models.CharField(max_length=100)
+	desc=models.CharField(max_length=500)
+
+class Launch(TimeStamp):
+	task=models.ForeignKey(Task)
+	alg_implementation=models.ForeignKey(AlgImplementation)
+	computer=models.ForeignKey(Computer)
+	time=models.FloatField()
