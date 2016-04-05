@@ -1,5 +1,13 @@
 from django.db import models
 
+def TypeIdToTypeStr(typeId):
+	data=["int","double","bool"]
+	return data[typeId]
+
+def TypeStrToTypeId(typeStr):
+	data={"int":0,"double":1,"bool":2}
+	return data[typeStr]
+
 class TimeStamp(models.Model):
 	created_date = models.DateTimeField(auto_now_add=True)
 	modified_date = models.DateTimeField(auto_now=True)
