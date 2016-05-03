@@ -1,0 +1,15 @@
+{% extends "master.html" %}
+
+{% block scripts %}
+<script src="/static/js/alggenerator.js"></script>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+{% csrf_token %}
+</form>
+<script>
+	bb=createAlgConstructorById({{ obj.id }});
+	document.getElementsByTagName("form")[0].appendChild(bb.body);
+</script>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "master.html" %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function parse(val) {
+    var tmp = [];
+    var params=location.search.substr(1).split("&");
+    for(var i=0;i<params.length;++i){
+    	tmp=params[i].split("=");
+    	if(tmp[0]==="download"){
+    		//window.location.assign("/core/downloadimpls/{{impl.id}}", '_blank')
+    		window.open("/core/downloadimpls/{{impl.id}}", '_blank')
+    	}
+    }
+}
+parse();
+</script>
+{% endblock %}
+
+{% block content %}
+<h4>Алгоритм:<a href='{% url "alg" alg_id %}'> {{alg_name}}</a></h2>
+<h4>ID: {{impl.id}}</h2>
+<h4>Автор: {{impl.author}}</h2>
+<h4>Файл: <a href='{% url "dlimpl" impl.id %}'>{{impl.fileName}}</a></h2>
+{% if impl.desc != "" %}
+<h4>Описание:</h2>
+<p>{{impl.desc}}</p>
+{% endif %}
+{% endblock %}

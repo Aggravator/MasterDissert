@@ -1,12 +1,27 @@
 from django.db import models
+import datetime
 
 def TypeIdToTypeStr(typeId):
-	data=["int","double","bool"]
+	data=["int","double","bool","string","date","time","datetime"]
 	return data[typeId]
 
 def TypeStrToTypeId(typeStr):
-	data={"int":0,"double":1,"bool":2}
+	data={"int":0,"double":1,"bool":2,"string":3,"date":4,"time":5,"datetime":6}
 	return data[typeStr]
+
+def typeIdToFieldStr(typeId):
+	data=["int_value","double_value","boolean_value","string_value","date_value","time_value","datetime_value"]
+	return data[typeId]
+
+def stringToValue(strValue,type):
+	if type==0: return int(strValue)
+	elif type==1: return float(strValue)
+	elif type==2: return strValue in ['True','true', '1', 't', 'y', 'yes']
+	elif type==3: return strValue
+	elif type==4: return datetime.datetime.strptime(strValue,"%d.%m.%Y").date()
+	elif type==5: return datetime.datetime.strptime(strValue,"%H:%M:%S").time()
+	elif type==6: return datetime.datetime.strptime(strValue,"%d.%m.%Y %H:%M:%S").datetime()
+
 
 class TimeStamp(models.Model):
 	created_date = models.DateTimeField(auto_now_add=True)
@@ -24,6 +39,15 @@ class Value(models.Model):
 	datetime_value=models.DateTimeField(blank=True,null=True)
 	class Meta:
 		abstract=True
+
+def getEntityValue(obj):
+	if not (obj.int_value is None): return obj.int_value
+	if not (obj.double_value is None): return obj.double_value
+	if not (obj.boolean_value is None): return obj.boolean_value
+	if not (obj.string_value is None): return obj.string_value
+	if not (obj.date_value is None): return obj.date_value
+	if not (obj.time_value is None): return obj.time_value
+	if not (obj.datetime_value is None): return obj.datetime_value
 
 class AlgConstructor(TimeStamp):
 	name=models.CharField(max_length=200)
@@ -58,15 +82,16 @@ class AlgTemplate(TimeStamp):
 class Algorithm(TimeStamp):
 	template=models.ForeignKey(AlgTemplate)
 
-class AlgImplementation(TimeStamp):
-	algorithm=models.ForeignKey(Algorithm)
-	author=models.CharField(max_length=200)
-	file=models.CharField(max_length=200)
-	desc=models.CharField(max_length=500,blank=True)
-
 class ParamOfAlg(TimeStamp,Value):
 	algorithm=models.ForeignKey(Algorithm)
 	param=models.ForeignKey(AlgParam)
+
+class AlgImplementation(TimeStamp):
+	algorithm=models.ForeignKey(Algorithm)
+	author=models.CharField(max_length=200)
+	file=models.CharField(max_length=400)
+	fileName=models.CharField(max_length=200)
+	desc=models.CharField(max_length=500,blank=True)
 
 class TaskParam(TimeStamp):
 	name=models.CharField(max_length=200)
