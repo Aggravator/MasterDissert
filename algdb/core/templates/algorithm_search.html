@@ -14,8 +14,9 @@
 {% block scripts %}
 <script>
 jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.document.location = $(this).data("href");
+    $(".clickable-row").click(function(event) {
+    	if(event.ctrlKey) window.open($(this).data("href"), '_blank');
+    	else window.document.location = $(this).data("href");
     });
 });
 </script>

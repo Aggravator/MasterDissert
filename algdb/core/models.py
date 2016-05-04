@@ -2,15 +2,15 @@ from django.db import models
 import datetime
 
 def TypeIdToTypeStr(typeId):
-	data=["int","double","bool","string","date","time","datetime"]
+	data=["int","double","bool","string","date","time","datetime","file"]
 	return data[typeId]
 
 def TypeStrToTypeId(typeStr):
-	data={"int":0,"double":1,"bool":2,"string":3,"date":4,"time":5,"datetime":6}
+	data={"int":0,"double":1,"bool":2,"string":3,"date":4,"time":5,"datetime":6,"file":7}
 	return data[typeStr]
 
 def typeIdToFieldStr(typeId):
-	data=["int_value","double_value","boolean_value","string_value","date_value","time_value","datetime_value"]
+	data=["int_value","double_value","boolean_value","string_value","date_value","time_value","datetime_value","file_value"]
 	return data[typeId]
 
 def stringToValue(strValue,type):
@@ -37,6 +37,8 @@ class Value(models.Model):
 	date_value=models.DateField(blank=True,null=True)
 	time_value=models.TimeField(blank=True,null=True)
 	datetime_value=models.DateTimeField(blank=True,null=True)
+	file_value=models.CharField(max_length=400,blank=True)
+	file_name=models.CharField(max_length=200,blank=True)
 	class Meta:
 		abstract=True
 
