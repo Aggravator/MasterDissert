@@ -66,6 +66,17 @@ for i in slots:
 	obj.save()
 	slotsId[i]=obj.id
 
+for i in params:
+	pName,pType=i.split("&")
+	obj=None
+	try:
+		obj=models.AlgParam.objects.get(gen_id=pName,type=models.TypeStrToTypeId(pType))
+		obj.name=params[i][3]
+	except models.AlgParam.DoesNotExist:
+		obj=models.AlgParam(gen_id=pName,type=models.TypeStrToTypeId(pType),name=params[i][3])
+	obj.save()
+	paramsId[i]=obj.id
+
 for i in strategies:
 	slot,strategy=i.split("&")
 	obj=None
@@ -78,20 +89,14 @@ for i in strategies:
 	except models.Strategy.DoesNotExist:
 		obj=models.Strategy(name=strategies[i]["title"],gen_id=strategy,slot=models.Slot.objects.get(id=slotsId[slot]),desc=strategies[i]["details"].strip("/ "))
 	obj.save()
+
+	if "params" in strategies[i]:
+		for j in strategies[i]["params"]:
+			p=models.AlgParam.objects.get(id=paramsId[j[1]+"&"+j[0]])
+			p.strategy=obj
+			p.save()
+
 	strategiesId[i]=obj.id
-
-for i in params:
-	pName,pType=i.split("&")
-	obj=None
-	try:
-		obj=models.AlgParam.objects.get(gen_id=pName,type=models.TypeStrToTypeId(pType))
-		obj.name=params[i][3]
-	except models.AlgParam.DoesNotExist:
-		obj=models.AlgParam(gen_id=pName,type=models.TypeStrToTypeId(pType),name=params[i][3])
-	obj.save()
-	paramsId[i]=obj.id
-
-
 
 #create json data
 sysdata=[slots,slotsId,strategies,strategiesId,params,paramsId]

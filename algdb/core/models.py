@@ -57,12 +57,6 @@ class AlgConstructor(TimeStamp):
 	data=models.CharField(max_length=3000)
 	desc=models.CharField(max_length=500,blank=True)
 
-class AlgParam(TimeStamp):
-	name=models.CharField(max_length=200)
-	desc=models.CharField(max_length=500,blank=True)
-	gen_id=models.CharField(max_length=100,blank=True)
-	type=models.PositiveSmallIntegerField()
-
 class Slot(TimeStamp):
 	name=models.CharField(max_length=200)
 	gen_id=models.CharField(max_length=100,blank=True)
@@ -73,6 +67,13 @@ class Strategy(TimeStamp):
 	slot=models.ForeignKey(Slot)
 	desc=models.CharField(max_length=500,blank=True)
 	gen_id=models.CharField(max_length=100,blank=True)
+
+class AlgParam(TimeStamp):
+	name=models.CharField(max_length=200)
+	desc=models.CharField(max_length=500,blank=True)
+	gen_id=models.CharField(max_length=100,blank=True)
+	strategy=models.ForeignKey(Strategy,blank=True,null=True)
+	type=models.PositiveSmallIntegerField()
 
 class AlgTemplate(TimeStamp):
 	name=models.CharField(max_length=200)

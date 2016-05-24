@@ -34,6 +34,13 @@ def AlgorithmView(request,algTemplId):
 		context["palgs"].append(param)
 	return render(request,'algorithm.html',context)
 
+class CreateTemplateAlgView(View):
+    def get(self, request):
+        return render(request, 'algtemplcreate.html')
+    def post(self,request):
+    	pass
+    	#algC=models.AlgConstructor.objects.get(pk=genId)
+
 def ImplementationView(request,implId):
 	impl=models.AlgImplementation.objects.get(pk=int(implId))
 	context={"alg_id":impl.algorithm.id,"alg_name":impl.algorithm.template.name,"impl":{"id":impl.id,"author":impl.author,"fileName":impl.fileName,"desc":impl.desc}}
