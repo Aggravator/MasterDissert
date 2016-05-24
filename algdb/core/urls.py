@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^talgs/([0-9]+)/$', views.TemplateAlgoirthmView,name='talg'),
     url(r'^createtalg/$', views.CreateTemplateAlgView.as_view(),name='ctalg'),
     url(r'^algs/([0-9]+)/$', views.AlgorithmView,name='alg'),
+    url(r'^createalg/$', views.CreateAlgView.as_view(),name='calg'),
     url(r'^implementations/([0-9]+)/$', views.ImplementationView,name='impl'),
     url(r'^downloadimpls/([0-9]+)/$', views.DownloadImplView,name='dlimpl'),
 ]

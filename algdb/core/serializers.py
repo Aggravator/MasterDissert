@@ -9,7 +9,7 @@ class AlgConstructorSerializer(serializers.ModelSerializer):
 class AlgParamSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = models.AlgParam
-		fields = ('id', 'gen_id', 'name', 'desc','type')
+		fields = ('id', 'gen_id', 'name', 'desc','type','strategy')
 
 class SlotSerializer(serializers.ModelSerializer):
 	class Meta:

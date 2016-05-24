@@ -1,0 +1,19 @@
+{% extends "master.html" %}
+
+{% block scripts %}
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/talgcreator.js"></script>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+{% csrf_token %}
+<h3 class="text-center">{{talg.name}}</h3>
+{% for param in talg.params.all %}
+  <div class="form-group"><label>{{ param.name }}</label><input type="text" class="form-control" name="param_{{ param.id }}"></div>
+{% endfor %}
+<input id="addtalgbutton" type="submit" class="btn btn-primary btn-block" value="Добавить алгоритм">
+</form>
+</script>
+
+{% endblock %}
