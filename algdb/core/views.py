@@ -69,6 +69,26 @@ class CreateAlgView(View):
         obj.save()
         return HttpResponseRedirect(reverse('alg', args=[obj.id]))
 
+class CreateAlgImplView(View):
+    def get(self, request):
+        if("id" in request.GET):
+            obj=models.Algorithm.objects.get(id=int(request.GET["id"]))
+            return render(request,'algimplcreate.html',{"alg":obj})
+    def post(self,request):
+        fileName=str(uuid.uuid1())
+        file=request.FILES.items().__next__()[1]
+        alg=models.Algorithm.objects.get(id=int(request.GET["id"]))
+        impl=models.AlgImplementation(algorithm=alg,author=request.POST["author"],file=fileName,fileName=file.name)
+        impl.desc=request.POST["description"]
+        impl.save()
+        #file=open(request.POST["file"],"r")
+        destFile=open(programCodePath+fileName,"wb")
+        for chunk in file.chunks():
+            destFile.write(chunk)
+        destFile.close()
+        file.close()
+        return HttpResponseRedirect(reverse('impl', args=[impl.id]))
+
 def ImplementationView(request,implId):
     impl=models.AlgImplementation.objects.get(pk=int(implId))
     context={"alg_id":impl.algorithm.id,"alg_name":impl.algorithm.template.name,"impl":{"id":impl.id,"author":impl.author,"fileName":impl.fileName,"desc":impl.desc}}
@@ -76,7 +96,7 @@ def ImplementationView(request,implId):
 
 def DownloadImplView(request,implId):
     impl=models.AlgImplementation.objects.get(pk=int(implId))
-    code=open(programCodePath+impl.file).read()
+    code=open(programCodePath+impl.file,"rb").read()
     response = HttpResponse(content_type='application/force-download')
     response['Content-Disposition'] = 'attachment; filename='+impl.fileName
     response.write(code)

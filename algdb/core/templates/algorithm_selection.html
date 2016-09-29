@@ -1,0 +1,43 @@
+{% extends "master.html" %}
+
+{% block styles %}
+<style type="text/css">
+.clickable-row{
+	
+}
+.clickable-row:hover{
+	cursor:pointer;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function(event) {
+    	if(event.ctrlKey) window.open($(this).data("href"), '_blank');
+    	else window.document.location = $(this).data("href");
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<form class="input-group" method="GET">
+	<input type="text" name="algname" class="form-control" value="{{ get.algname }}">
+	<span class="input-group-addon">
+        <button  type="submit" style="background: transparent;border: 0px;">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </span>
+</form>
+<br/>
+<table class="table table-striped table-hover">
+	<thead> <tr> <th>ID</th> <th>Name</th> </tr> </thead>
+	<tbody>
+		{% for obj in algs %}
+			<tr class="clickable-row" data-href='{% url "cimplalg" %}?id={{obj.id}}'><td>{{obj.id}}</td><td>{{obj.template.name}}</td></tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
